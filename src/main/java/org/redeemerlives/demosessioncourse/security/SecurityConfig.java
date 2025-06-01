@@ -1,4 +1,4 @@
-package org.redeemerlives.demosessioncourse.controller.security;
+package org.redeemerlives.demosessioncourse.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package org.redeemerlives.demosessioncourse.controller.config;
+package org.redeemerlives.demosessioncourse.config;
 
 import lombok.RequiredArgsConstructor;
 import org.redeemerlives.demosessioncourse.repository.UserRepository;

@@ -43,13 +43,11 @@ public class HomeController {
                         .body(Map.of("error", "Password is required"));
             }
 
-            // Check if user already exists
             if (userRepository.findUserByUsername(username).isPresent()) {
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Username already exists"));
             }
 
-            // Create new user
             User user = User.builder()
                     .username(username)
                     .password(passwordEncoder.encode(password))
@@ -79,18 +77,15 @@ public class HomeController {
                         .body(Map.of("error", "Username and password are required"));
             }
 
-            // Authenticate user
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(username, password);
 
             Authentication authentication = authenticationManager.authenticate(authToken);
 
-            // Set authentication in security context
             SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
             securityContext.setAuthentication(authentication);
             SecurityContextHolder.setContext(securityContext);
 
-            // Save security context to session
             HttpSession session = httpRequest.getSession(true);
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
 
@@ -124,9 +119,10 @@ public class HomeController {
     }
 
     @GetMapping("/greeting")
-    public ResponseEntity<?> greeting(Principal principal) {
+    public ResponseEntity<?> greeting(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
         return ResponseEntity.ok(Map.of(
-                "message", "Hello, " + principal.getName() + "!",
+                "message", "Hello, " + user.getName() + "! " + user.getAuthorities(),
                 "timestamp", System.currentTimeMillis()
         ));
     }
